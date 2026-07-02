@@ -1,0 +1,6 @@
+{
+  "name": "Personal Finance Management Platform",
+  "description": "A secure, locally-encrypted personal finance manager with budget planning, expense tracking, detailed reporting, and biometric access.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
