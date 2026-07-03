@@ -571,44 +571,44 @@ export default function Home() {
           </div>
 
           {/* Core Dashboard Header */}
-          <header className="bg-white border-b-4 border-slate-100 py-4 px-4 sm:px-6 sticky top-0 z-40 shadow-xs" id="dashboard-header">
+          <header className="bg-white border-b border-slate-200/80 py-4 px-4 sm:px-6 sticky top-0 z-40 shadow-xs" id="dashboard-header">
             <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
               <div className="flex items-center gap-3">
-                <span className="p-2.5 bg-amber-500 text-white rounded-3xl flex items-center justify-center shadow-md">
-                  <Coins className="w-6 h-6 text-yellow-200 animate-bounce" />
+                <span className="p-2 bg-amber-500 text-white rounded-xl flex items-center justify-center shadow-xs">
+                  <Coins className="w-5 h-5 text-yellow-100" />
                 </span>
                 <div>
-                  <h1 className="text-xl font-black text-slate-900 tracking-tight leading-none">🧸 {t.appName}</h1>
-                  <span className="text-[11px] font-bold text-slate-400 tracking-wide mt-1 block">{t.appSubtitle}</span>
+                  <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-none">{t.appName}</h1>
+                  <span className="text-[10px] font-semibold text-slate-400 tracking-wide mt-1 block">{t.appSubtitle}</span>
                 </div>
               </div>
 
               {/* Language Switcher & Lock action */}
               <div className="flex items-center gap-3 flex-wrap w-full lg:w-auto justify-between lg:justify-start pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100">
                 <div className="flex items-center gap-2">
-                  <span className="w-9 h-9 rounded-2xl bg-amber-100 border-2 border-amber-200 flex items-center justify-center font-black text-amber-800 text-sm select-none">
+                  <span className="w-8 h-8 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center font-bold text-amber-800 text-xs select-none">
                     {activeDb.profile.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
                   </span>
                   <div className="text-left leading-tight mr-2">
-                    <span className="text-xs font-black text-slate-800 block truncate max-w-[120px]" id="header-user-name">
+                    <span className="text-xs font-bold text-slate-800 block truncate max-w-[120px]" id="header-user-name">
                       {activeDb.profile.name}
                     </span>
-                    <span className="text-[10px] text-slate-400 font-bold block truncate max-w-[120px]">
+                    <span className="text-[10px] text-slate-400 font-semibold block truncate max-w-[120px]">
                       {currentUserEmail}
                     </span>
                   </div>
                 </div>
 
                 {/* Playful Language Switcher */}
-                <div className="flex gap-1 bg-amber-50 p-1 rounded-2xl border-2 border-amber-200" id="language-switcher">
+                <div className="flex gap-1 bg-slate-100/80 p-1 rounded-xl border border-slate-200/60" id="language-switcher">
                   {(['en', 'ru', 'uz'] as Language[]).map((lang) => (
                     <button
                       key={lang}
                       onClick={() => setLanguage(lang)}
-                      className={`px-3 py-1.5 text-xs font-black rounded-xl transition-all cursor-pointer ${
+                      className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                         language === lang
-                          ? 'bg-amber-500 text-white shadow-sm'
-                          : 'text-slate-500 hover:text-slate-800'
+                          ? 'bg-amber-500 text-white shadow-xs'
+                          : 'text-slate-500 hover:text-slate-850'
                       }`}
                       type="button"
                     >
@@ -620,19 +620,19 @@ export default function Home() {
                 {/* Lock Action */}
                 <button
                   onClick={handleLockSession}
-                  className="py-2.5 px-3.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white transition-all text-xs font-black flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
+                  className="py-2 px-3 rounded-xl bg-rose-500 hover:bg-rose-600 text-white transition-all text-xs font-bold flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer"
                   id="lock-session-btn"
                 >
-                  <Lock className="w-3.5 h-3.5 stroke-[2.5px]" /> {t.lockVault}
+                  <Lock className="w-3.5 h-3.5 stroke-[2px]" /> {t.lockVault}
                 </button>
               </div>
             </div>
           </header>
 
           {/* Module Navigation Tabs */}
-          <nav className="bg-slate-50 border-b-2 border-slate-150 sticky top-[73px] z-30" id="navigation-tabs-bar">
+          <nav className="bg-slate-50 border-b border-slate-200/80 sticky top-[69px] z-30" id="navigation-tabs-bar">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
-              <div className="flex space-x-6 overflow-x-auto scrollbar-none py-2.5">
+              <div className="flex space-x-4 overflow-x-auto scrollbar-none py-2">
                 {[
                   { id: 'overview', label: t.tabReports, icon: TrendingUp },
                   { id: 'ledger', label: t.tabLedger, icon: History },
@@ -645,14 +645,14 @@ export default function Home() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id as any)}
-                      className={`flex items-center gap-2 text-xs font-black py-2.5 px-3 rounded-2xl transition-all cursor-pointer whitespace-nowrap shrink-0 border-2 ${
+                      className={`flex items-center gap-2 text-xs font-semibold py-2 px-3.5 rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 border ${
                         isTabActive
-                          ? 'bg-amber-500 border-amber-600 text-white shadow-md'
-                          : 'bg-white border-slate-200 text-slate-500 hover:text-slate-800 hover:border-slate-300'
+                          ? 'bg-amber-500 border-amber-500 text-white shadow-xs font-bold'
+                          : 'bg-white border-slate-200/60 text-slate-500 hover:text-slate-850 hover:border-slate-300'
                       }`}
                       id={`tab-nav-${tab.id}`}
                     >
-                      <IconComponent className={`w-4 h-4 ${isTabActive ? 'text-white stroke-[3px]' : 'text-slate-400'}`} />
+                      <IconComponent className={`w-3.5 h-3.5 ${isTabActive ? 'text-white stroke-[2px]' : 'text-slate-400'}`} />
                       {tab.label}
                     </button>
                   );
@@ -724,26 +724,26 @@ export default function Home() {
           <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10" id="auth-box">
             {/* Header branding */}
             <div className="text-center mb-8">
-              <div className="inline-flex p-4 bg-amber-500 text-white rounded-3xl shadow-lg mb-4">
-                <Coins className="w-10 h-10 text-yellow-200 animate-bounce" />
+              <div className="inline-flex p-3 bg-amber-500 text-white rounded-xl shadow-xs mb-4">
+                <Coins className="w-8 h-8 text-yellow-100" />
               </div>
-              <h2 className="text-3xl font-black tracking-tight text-slate-950">
+              <h2 className="text-2xl font-bold tracking-tight text-slate-950">
                 {t.appName}
               </h2>
-              <p className="text-xs font-bold text-slate-500 mt-2 max-w-xs mx-auto">
+              <p className="text-xs font-semibold text-slate-400 mt-1 max-w-xs mx-auto">
                 {t.appSubtitle}
               </p>
 
               {/* Login Language Switcher */}
               <div className="mt-4 flex justify-center">
-                <div className="flex gap-1 bg-amber-100 p-1 rounded-2xl border-2 border-amber-200" id="login-language-switcher">
+                <div className="flex gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/60" id="login-language-switcher">
                   {(['en', 'ru', 'uz'] as Language[]).map((lang) => (
                     <button
                       key={lang}
                       onClick={() => setLanguage(lang)}
-                      className={`px-3 py-1.5 text-xs font-black rounded-xl transition-all cursor-pointer ${
+                      className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                         language === lang
-                          ? 'bg-amber-500 text-white shadow-sm'
+                          ? 'bg-amber-500 text-white shadow-xs'
                           : 'text-slate-600 hover:text-slate-800'
                       }`}
                       type="button"
@@ -756,16 +756,16 @@ export default function Home() {
             </div>
 
             {/* Main Auth form Card */}
-            <div className="bg-white py-6 px-6 sm:px-10 rounded-3xl border-4 border-amber-200 shadow-xl" id="auth-card">
+            <div className="bg-white py-6 px-6 sm:px-10 rounded-2xl border border-slate-200/80 shadow-lg" id="auth-card">
               
               {/* LOGIN SCREEN VIEW */}
               {authView === 'login' && (
                 <div className="space-y-6" id="login-panel-form">
-                  <div className="border-b-2 border-slate-100 pb-3 flex justify-between items-center">
-                    <span className="text-sm font-black text-slate-800">{t.unlockVault.split('!')[0]}</span>
+                  <div className="border-b border-slate-100 pb-3 flex justify-between items-center">
+                    <span className="text-sm font-bold text-slate-850">{t.unlockVault.split('!')[0]}</span>
                     <button
                       onClick={() => { setAuthView('register'); setAuthError(''); setAuthSuccess(''); }}
-                      className="text-xs font-black text-amber-600 hover:text-amber-700 transition-colors cursor-pointer"
+                      className="text-xs font-bold text-amber-600 hover:text-amber-700 transition-colors cursor-pointer"
                       id="go-register-btn"
                     >
                       {t.createAccount}
@@ -774,7 +774,7 @@ export default function Home() {
 
                   <form onSubmit={handleLogin} className="space-y-4">
                     <div className="space-y-1">
-                      <label htmlFor="login-email" className="text-xs font-black text-slate-700 block">{t.emailAddress}</label>
+                      <label htmlFor="login-email" className="text-xs font-semibold text-slate-600 block">{t.emailAddress}</label>
                       <input
                         id="login-email"
                         type="email"
@@ -782,17 +782,17 @@ export default function Home() {
                         value={authEmail}
                         onChange={(e) => setAuthEmail(e.target.value)}
                         required
-                        className="w-full px-4 py-3 text-sm font-bold bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-200 focus:bg-white text-slate-900"
+                        className="w-full px-3 py-2 text-sm font-semibold bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/10 focus:border-amber-500 text-slate-900"
                       />
                     </div>
 
                     <div className="space-y-1">
                       <div className="flex justify-between items-center">
-                        <label htmlFor="login-password" className="text-xs font-black text-slate-700 block">{t.passcode}</label>
+                        <label htmlFor="login-password" className="text-xs font-semibold text-slate-600 block">{t.passcode}</label>
                         <button
                           type="button"
                           onClick={() => { setAuthView('recover'); setRecoveryStep('email'); setAuthError(''); setAuthSuccess(''); }}
-                          className="text-xs font-bold text-slate-400 hover:text-amber-500 transition-colors cursor-pointer"
+                          className="text-xs font-semibold text-slate-400 hover:text-amber-600 transition-colors cursor-pointer"
                           id="forgot-pass-btn"
                         >
                           {t.forgotPass}
@@ -805,19 +805,19 @@ export default function Home() {
                         value={authPassword}
                         onChange={(e) => setAuthPassword(e.target.value)}
                         required
-                        className="w-full px-4 py-3 text-sm font-bold bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-200 focus:bg-white text-slate-900"
+                        className="w-full px-3 py-2 text-sm font-semibold bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/10 focus:border-amber-500 text-slate-900"
                       />
                     </div>
 
                     {authError && (
-                      <div className="p-3 bg-rose-50 border-2 border-rose-200 text-rose-600 text-xs font-bold rounded-xl flex items-start gap-1.5 animate-pulse" id="login-error-alert">
+                      <div className="p-3 bg-rose-50 border border-rose-200 text-rose-600 text-xs font-semibold rounded-xl flex items-start gap-1.5" id="login-error-alert">
                         <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                         <span>{authError}</span>
                       </div>
                     )}
 
                     {authSuccess && (
-                      <div className="p-3 bg-emerald-50 border-2 border-emerald-200 text-emerald-700 text-xs font-bold rounded-xl flex items-start gap-1.5" id="login-success-alert">
+                      <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold rounded-xl flex items-start gap-1.5" id="login-success-alert">
                         <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
                         <span>{authSuccess}</span>
                       </div>
@@ -826,23 +826,23 @@ export default function Home() {
                     <div className="pt-2">
                       <button
                         type="submit"
-                        className="w-full py-3.5 px-4 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl text-sm font-black flex items-center justify-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer"
+                        className="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 shadow-xs transition-all active:scale-95 cursor-pointer"
                         id="login-submit-btn"
                       >
-                        <Unlock className="w-5 h-5 stroke-[2.5px]" /> {t.unlockVault}
+                        <Unlock className="w-4 h-4 stroke-[2px]" /> {t.unlockVault}
                       </button>
                     </div>
                   </form>
 
                   {/* Biometrics login button option */}
-                  <div className="border-t-2 border-slate-100 pt-4 text-center">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2.5">{t.fastSecurityPass}</span>
+                  <div className="border-t border-slate-100 pt-4 text-center">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2">{t.fastSecurityPass}</span>
                     <button
                       onClick={handleTriggerBiometricLogin}
-                      className="w-full py-3 px-4 rounded-2xl border-2 border-slate-200 hover:bg-slate-50 transition-all text-xs font-black text-slate-700 flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+                      className="w-full py-2.5 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all text-xs font-bold text-slate-700 flex items-center justify-center gap-2 shadow-xs cursor-pointer"
                       id="biometric-login-btn"
                     >
-                      <Fingerprint className="w-5 h-5 text-emerald-500 animate-bounce" /> {t.unlockWithBiometrics}
+                      <Fingerprint className="w-4 h-4 text-emerald-500" /> {t.unlockWithBiometrics}
                     </button>
                   </div>
                 </div>
@@ -851,11 +851,11 @@ export default function Home() {
               {/* REGISTER SCREEN VIEW */}
               {authView === 'register' && (
                 <div className="space-y-6" id="register-panel-form">
-                  <div className="border-b-2 border-slate-100 pb-3 flex justify-between items-center">
-                    <span className="text-sm font-black text-slate-800">{t.createAccount}</span>
+                  <div className="border-b border-slate-100 pb-3 flex justify-between items-center">
+                    <span className="text-sm font-bold text-slate-855">{t.createAccount}</span>
                     <button
                       onClick={() => { setAuthView('login'); setAuthError(''); setAuthSuccess(''); }}
-                      className="text-xs font-black text-amber-600 hover:text-amber-700 transition-colors cursor-pointer"
+                      className="text-xs font-bold text-amber-600 hover:text-amber-700 transition-colors cursor-pointer"
                       id="go-login-btn"
                     >
                       {t.backToSignIn}
@@ -864,7 +864,7 @@ export default function Home() {
 
                   <form onSubmit={handleRegister} className="space-y-4">
                     <div className="space-y-1">
-                      <label htmlFor="register-name" className="text-xs font-black text-slate-700 block">{t.yourName}</label>
+                      <label htmlFor="register-name" className="text-xs font-semibold text-slate-600 block">{t.yourName}</label>
                       <input
                         id="register-name"
                         type="text"
@@ -872,12 +872,12 @@ export default function Home() {
                         value={authName}
                         onChange={(e) => setAuthName(e.target.value)}
                         required
-                        className="w-full px-4 py-3 text-sm font-bold bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-200 focus:bg-white text-slate-900"
+                        className="w-full px-3 py-2 text-sm font-semibold bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/10 focus:border-amber-500 text-slate-900"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label htmlFor="register-email" className="text-xs font-black text-slate-700 block">{t.emailAddress}</label>
+                      <label htmlFor="register-email" className="text-xs font-semibold text-slate-600 block">{t.emailAddress}</label>
                       <input
                         id="register-email"
                         type="email"
@@ -885,12 +885,12 @@ export default function Home() {
                         value={authEmail}
                         onChange={(e) => setAuthEmail(e.target.value)}
                         required
-                        className="w-full px-4 py-3 text-sm font-bold bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-200 focus:bg-white text-slate-900"
+                        className="w-full px-3 py-2 text-sm font-semibold bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/10 focus:border-amber-500 text-slate-900"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label htmlFor="register-password" className="text-xs font-black text-slate-700 block">{t.passcode}</label>
+                      <label htmlFor="register-password" className="text-xs font-semibold text-slate-600 block">{t.passcode}</label>
                       <input
                         id="register-password"
                         type="password"
@@ -898,22 +898,22 @@ export default function Home() {
                         value={authPassword}
                         onChange={(e) => setAuthPassword(e.target.value)}
                         required
-                        className="w-full px-4 py-3 text-sm font-bold bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-200 focus:bg-white text-slate-900"
+                        className="w-full px-3 py-2 text-sm font-semibold bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/10 focus:border-amber-500 text-slate-900"
                       />
-                      <span className="text-[10px] text-slate-400 block font-bold leading-tight pt-1">
+                      <span className="text-[10px] text-slate-400 block font-semibold leading-tight pt-1">
                         {t.securePasswordNote}
                       </span>
                     </div>
 
                     {authError && (
-                      <div className="p-3 bg-rose-50 border-2 border-rose-200 text-rose-600 text-xs font-bold rounded-xl flex items-start gap-1.5 animate-pulse" id="register-error-alert">
+                      <div className="p-3 bg-rose-50 border border-rose-200 text-rose-600 text-xs font-semibold rounded-xl flex items-start gap-1.5" id="register-error-alert">
                         <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                         <span>{authError}</span>
                       </div>
                     )}
 
                     {authSuccess && (
-                      <div className="p-3 bg-emerald-50 border-2 border-emerald-200 text-emerald-700 text-xs font-bold rounded-xl flex items-start gap-1.5" id="register-success-alert">
+                      <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold rounded-xl flex items-start gap-1.5" id="register-success-alert">
                         <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
                         <span>{authSuccess}</span>
                       </div>
@@ -922,10 +922,10 @@ export default function Home() {
                     <div className="pt-2">
                       <button
                         type="submit"
-                        className="w-full py-3.5 px-4 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl text-sm font-black flex items-center justify-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer"
+                        className="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 shadow-xs transition-all active:scale-95 cursor-pointer"
                         id="register-submit-btn"
                       >
-                        <Key className="w-5 h-5 stroke-[2.5px]" /> {t.initializeAndEncrypt}
+                        <Key className="w-4 h-4 stroke-[2px]" /> {t.initializeAndEncrypt}
                       </button>
                     </div>
                   </form>
@@ -935,11 +935,11 @@ export default function Home() {
               {/* PASSWORD RECOVERY VIEW */}
               {authView === 'recover' && (
                 <div className="space-y-6" id="recovery-panel-form">
-                  <div className="border-b-2 border-slate-100 pb-3 flex justify-between items-center">
-                    <span className="text-sm font-black text-slate-800">{t.passcodeRecovery}</span>
+                  <div className="border-b border-slate-100 pb-3 flex justify-between items-center">
+                    <span className="text-sm font-bold text-slate-855">{t.passcodeRecovery}</span>
                     <button
                       onClick={() => { setAuthView('login'); setAuthError(''); setAuthSuccess(''); setRecoveryStep('email'); }}
-                      className="text-xs font-black text-amber-600 hover:text-amber-700 transition-colors cursor-pointer"
+                      className="text-xs font-bold text-amber-600 hover:text-amber-700 transition-colors cursor-pointer"
                       id="back-to-login-from-recovery"
                     >
                       {t.backToSignIn}
@@ -948,11 +948,11 @@ export default function Home() {
 
                   {recoveryStep === 'email' && (
                     <form onSubmit={handleInitiateRecovery} className="space-y-4">
-                      <p className="text-xs font-bold text-slate-500 leading-normal">
+                      <p className="text-xs font-semibold text-slate-400 leading-normal">
                         {t.recoveryEmailLabel}
                       </p>
                       <div className="space-y-1">
-                        <label htmlFor="recover-email" className="text-xs font-black text-slate-700 block">{t.emailAddress}</label>
+                        <label htmlFor="recover-email" className="text-xs font-semibold text-slate-600 block">{t.emailAddress}</label>
                         <input
                           id="recover-email"
                           type="email"
@@ -960,35 +960,35 @@ export default function Home() {
                           value={authEmail}
                           onChange={(e) => setAuthEmail(e.target.value)}
                           required
-                          className="w-full px-4 py-3 text-sm font-bold bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-200 focus:bg-white text-slate-900"
+                          className="w-full px-3 py-2 text-sm font-semibold bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/10 focus:border-amber-500 text-slate-900"
                         />
                       </div>
 
                       {authError && (
-                        <p className="text-xs font-bold text-rose-600 bg-rose-50 p-3 rounded-xl border-2 border-rose-200">
+                        <p className="text-xs font-semibold text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200">
                           {authError}
                         </p>
                       )}
 
                       <button
                         type="submit"
-                        className="w-full py-3.5 px-4 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl text-sm font-black flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
+                        className="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                         id="recover-step-1-btn"
                       >
-                        {t.retrieveQuestion} <ArrowRight className="w-5 h-5 stroke-[2.5px]" />
+                        {t.retrieveQuestion} <ArrowRight className="w-4 h-4 stroke-[2px]" />
                       </button>
                     </form>
                   )}
 
                   {recoveryStep === 'question' && (
                     <form onSubmit={handleVerifyRecovery} className="space-y-4">
-                      <div className="p-4 rounded-2xl bg-amber-50 border-2 border-amber-200 space-y-1 text-slate-700">
-                        <span className="text-[10px] uppercase font-black tracking-wider text-amber-800 block">{t.securityChallenge}</span>
-                        <p className="text-xs font-black leading-normal">{getQuestionLabel(recoveryQuestion)}</p>
+                      <div className="p-4 rounded-xl bg-amber-50/20 border border-amber-200/80 space-y-1 text-slate-700">
+                        <span className="text-[10px] uppercase font-bold tracking-wider text-amber-800 block">{t.securityChallenge}</span>
+                        <p className="text-xs font-semibold leading-normal">{getQuestionLabel(recoveryQuestion)}</p>
                       </div>
 
                       <div className="space-y-1">
-                        <label htmlFor="recover-answer" className="text-xs font-black text-slate-700 block">{t.yourAnswer}</label>
+                        <label htmlFor="recover-answer" className="text-xs font-semibold text-slate-600 block">{t.yourAnswer}</label>
                         <input
                           id="recover-answer"
                           type="text"
@@ -996,35 +996,35 @@ export default function Home() {
                           value={recoveryAnswer}
                           onChange={(e) => setRecoveryAnswer(e.target.value)}
                           required
-                          className="w-full px-4 py-3 text-sm font-bold bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-200 focus:bg-white text-slate-900"
+                          className="w-full px-3 py-2 text-sm font-semibold bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/10 focus:border-amber-500 text-slate-900"
                         />
-                        <span className="text-[10px] text-slate-400 block font-bold leading-normal mt-1">{t.recoveryAnswerNote}</span>
+                        <span className="text-[10px] text-slate-400 block font-semibold leading-normal mt-1">{t.recoveryAnswerNote}</span>
                       </div>
 
                       {authError && (
-                        <p className="text-xs font-bold text-rose-600 bg-rose-50 p-3 rounded-xl border-2 border-rose-200 animate-pulse">
+                        <p className="text-xs font-semibold text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200">
                           {authError}
                         </p>
                       )}
 
                       <button
                         type="submit"
-                        className="w-full py-3.5 px-4 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl text-sm font-black flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
+                        className="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                         id="recover-step-2-btn"
                       >
-                        {t.verifyAnswer} <ArrowRight className="w-5 h-5 stroke-[2.5px]" />
+                        {t.verifyAnswer} <ArrowRight className="w-4 h-4 stroke-[2px]" />
                       </button>
                     </form>
                   )}
 
                   {recoveryStep === 'reset' && (
                     <form onSubmit={handleResetPassword} className="space-y-4">
-                      <p className="text-xs font-bold text-slate-500 leading-normal">
+                      <p className="text-xs font-semibold text-slate-400 leading-normal">
                         Approved! Reset your secret passcode below:
                       </p>
                       
                       <div className="space-y-1">
-                        <label htmlFor="recover-new-password" className="text-xs font-black text-slate-700 block">{t.newPasscode}</label>
+                        <label htmlFor="recover-new-password" className="text-xs font-semibold text-slate-600 block">{t.newPasscode}</label>
                         <input
                           id="recover-new-password"
                           type="password"
@@ -1032,22 +1032,22 @@ export default function Home() {
                           value={recoveryNewPassword}
                           onChange={(e) => setRecoveryNewPassword(e.target.value)}
                           required
-                          className="w-full px-4 py-3 text-sm font-bold bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-200 focus:bg-white text-slate-900"
+                          className="w-full px-3 py-2 text-sm font-semibold bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/10 focus:border-amber-500 text-slate-900"
                         />
                       </div>
 
                       {authError && (
-                        <p className="text-xs font-bold text-rose-600 bg-rose-50 p-3 rounded-xl border-2 border-rose-200">
+                        <p className="text-xs font-semibold text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200">
                           {authError}
                         </p>
                       )}
 
                       <button
                         type="submit"
-                        className="w-full py-3.5 px-4 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl text-sm font-black flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
+                        className="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                         id="recover-step-3-btn"
                       >
-                        {t.saveNewPasscode} <ArrowRight className="w-5 h-5 stroke-[2.5px]" />
+                        {t.saveNewPasscode} <ArrowRight className="w-4 h-4 stroke-[2px]" />
                       </button>
                     </form>
                   )}
@@ -1077,10 +1077,10 @@ export default function Home() {
       />
 
       {/* Beautiful standard footer */}
-      <footer className="bg-white border-t-2 border-slate-100 py-4 px-4 text-center text-[10px] text-slate-400 font-bold" id="global-footer">
+      <footer className="bg-white border-t border-slate-150 py-4 px-4 text-center text-[10px] text-slate-400 font-semibold" id="global-footer">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
           <span>&copy; {new Date().getFullYear()} FinVault Kids. {t.localSandbox}</span>
-          <span className="flex items-center gap-1 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 text-emerald-700">
+          <span className="flex items-center gap-1 bg-emerald-50/50 px-3 py-1 rounded-full border border-emerald-100 text-emerald-700">
             <Shield className="w-3.5 h-3.5" /> End-to-End Local Cryptography Sandbox Active
           </span>
         </div>
