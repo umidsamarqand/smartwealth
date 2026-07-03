@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Fingerprint, Scan, ShieldAlert, CheckCircle2, X } from 'lucide-react';
-import { TRANSLATIONS, Language } from '../lib/translations';
 
 interface BiometricAuthModalProps {
   isOpen: boolean;
@@ -12,7 +11,6 @@ interface BiometricAuthModalProps {
   onFailure: (reason: string) => void;
   mode: 'register' | 'authenticate';
   biometricType?: 'fingerprint' | 'face';
-  language: Language;
 }
 
 export default function BiometricAuthModal({
@@ -21,11 +19,8 @@ export default function BiometricAuthModal({
   onSuccess,
   onFailure,
   mode,
-  biometricType = 'fingerprint',
-  language
+  biometricType = 'fingerprint'
 }: BiometricAuthModalProps) {
-  const t = TRANSLATIONS[language] || TRANSLATIONS.en;
-
   const [scanState, setScanState] = useState<'idle' | 'scanning' | 'success' | 'failed'>('idle');
   const [progress, setProgress] = useState(0);
 
@@ -47,7 +42,7 @@ export default function BiometricAuthModal({
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          // 95% chance of success for smooth simulation
+          // 90% chance of success for smooth simulation
           if (Math.random() < 0.95) {
             setScanState('success');
             setTimeout(() => {
@@ -57,13 +52,13 @@ export default function BiometricAuthModal({
           } else {
             setScanState('failed');
             setTimeout(() => {
-              onFailure('Biometric scan match mismatch.');
+              onFailure('Biometric scanner matching error. Please try again.');
               setScanState('idle');
             }, 2000);
           }
           return 100;
         }
-        return prev + 10;
+        return prev + 5;
       });
     }, 100);
   };
@@ -85,53 +80,52 @@ export default function BiometricAuthModal({
 
         {/* Modal Content */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 30 }}
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 30 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-          className="relative w-full max-w-sm overflow-hidden rounded-2xl bg-white p-6 shadow-2xl border border-slate-200/80 z-10"
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white p-6 shadow-xl border border-slate-100 z-10"
           id="biometric-modal-content"
         >
           {/* Close Button */}
           {scanState !== 'scanning' && (
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors p-1.5 rounded-full hover:bg-slate-50 cursor-pointer border border-slate-200/60"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg hover:bg-slate-50"
               aria-label="Close"
               id="biometric-close-btn"
             >
-              <X className="w-4 h-4 stroke-[2px]" />
+              <X className="w-5 h-5" />
             </button>
           )}
 
           <div className="flex flex-col items-center text-center mt-2">
             <div className="mb-2">
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/60 uppercase tracking-wider">
-                {t.biometricTitle}
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 uppercase tracking-wider">
+                Local Biometric Security
               </span>
             </div>
 
-            <h3 className="text-lg font-bold text-slate-900 mt-1">
-              {mode === 'register' ? t.registerBiometrics : t.fastSecurityPass}
+            <h3 className="text-xl font-semibold text-slate-900 mt-2">
+              {mode === 'register' ? 'Register Biometric Access' : 'Biometric Security Check'}
             </h3>
-            <p className="text-xs font-semibold text-slate-400 mt-1 max-w-xs leading-relaxed">
+            <p className="text-sm text-slate-500 mt-1 max-w-xs">
               {mode === 'register' 
-                ? t.biometricsNotActiveSub
-                : t.biometricsActiveSub}
+                ? 'Register your device biometric fingerprint or face profile to enable rapid login.' 
+                : 'Authenticate using your local biometric profile to unlock and decrypt your financial vault.'}
             </p>
 
             {/* Scanning Stage */}
-            <div className="relative my-6 flex items-center justify-center w-36 h-36">
+            <div className="relative my-8 flex items-center justify-center w-40 h-40">
               {/* Outer Pulse rings */}
               {scanState === 'scanning' && (
                 <>
                   <motion.div 
-                    animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.1, 0.4] }}
+                    animate={{ scale: [1, 1.4, 1], opacity: [0.5, 0.1, 0.5] }}
                     transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
                     className="absolute inset-0 rounded-full border border-emerald-400/40"
                   />
                   <motion.div 
-                    animate={{ scale: [1.1, 1.5, 1.1], opacity: [0.2, 0, 0.2] }}
+                    animate={{ scale: [1.1, 1.6, 1.1], opacity: [0.3, 0, 0.3] }}
                     transition={{ repeat: Infinity, duration: 2, ease: "easeInOut", delay: 0.5 }}
                     className="absolute inset-0 rounded-full border border-emerald-400/20"
                   />
@@ -139,11 +133,11 @@ export default function BiometricAuthModal({
               )}
 
               {/* Central Circle */}
-              <div className={`w-28 h-28 rounded-full flex items-center justify-center transition-all duration-300 relative overflow-hidden border ${
-                scanState === 'success' ? 'bg-emerald-50 border-emerald-500 text-emerald-600' :
-                scanState === 'failed' ? 'bg-rose-50 border-rose-500 text-rose-600' :
-                scanState === 'scanning' ? 'bg-slate-50 border-slate-200 text-slate-400' :
-                'bg-emerald-50 border-emerald-200/80 text-emerald-600 hover:scale-105 cursor-pointer shadow-sm'
+              <div className={`w-32 h-32 rounded-full flex items-center justify-center transition-colors duration-300 relative overflow-hidden ${
+                scanState === 'success' ? 'bg-emerald-50 border-2 border-emerald-500 text-emerald-600' :
+                scanState === 'failed' ? 'bg-rose-50 border-2 border-rose-500 text-rose-600' :
+                scanState === 'scanning' ? 'bg-slate-50 border-2 border-slate-200 text-slate-400' :
+                'bg-slate-50 border border-slate-200 text-slate-500 hover:border-slate-300 cursor-pointer'
               }`}
               onClick={scanState === 'idle' ? startScan : undefined}
               id="biometric-trigger-zone"
@@ -151,49 +145,49 @@ export default function BiometricAuthModal({
                 {/* Simulated Scanning Line */}
                 {scanState === 'scanning' && (
                   <motion.div
-                    animate={{ y: [-40, 70, -40] }}
+                    animate={{ y: [-48, 80, -48] }}
                     transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                    className="absolute left-0 right-0 h-0.5 bg-emerald-500 shadow-[0_0_8px_#10b981] z-10"
+                    className="absolute left-0 right-0 h-0.5 bg-emerald-500 shadow-[0_0_12px_#10b981] z-10"
                   />
                 )}
 
                 {/* Icons based on state */}
                 {scanState === 'success' ? (
                   <motion.div initial={{ scale: 0.5 }} animate={{ scale: 1 }}>
-                    <CheckCircle2 className="w-12 h-12 text-emerald-500 stroke-[2px]" />
+                    <CheckCircle2 className="w-16 h-16 text-emerald-500" />
                   </motion.div>
                 ) : scanState === 'failed' ? (
                   <motion.div initial={{ scale: 0.5 }} animate={{ scale: 1 }}>
-                    <ShieldAlert className="w-12 h-12 text-rose-500 stroke-[2px]" />
+                    <ShieldAlert className="w-16 h-16 text-rose-500" />
                   </motion.div>
                 ) : biometricType === 'fingerprint' ? (
-                  <Fingerprint className={`w-12 h-12 stroke-[2px] ${scanState === 'scanning' ? 'text-emerald-500/80 animate-pulse' : 'text-emerald-600 hover:text-emerald-700 transition-colors'}`} />
+                  <Fingerprint className={`w-16 h-16 ${scanState === 'scanning' ? 'text-emerald-500/80 animate-pulse' : 'text-slate-400 hover:text-indigo-500 transition-colors'}`} />
                 ) : (
-                  <Scan className={`w-12 h-12 stroke-[2px] ${scanState === 'scanning' ? 'text-emerald-500/80 animate-pulse' : 'text-emerald-600 hover:text-emerald-700 transition-colors'}`} />
+                  <Scan className={`w-16 h-16 ${scanState === 'scanning' ? 'text-emerald-500/80 animate-pulse' : 'text-slate-400 hover:text-indigo-500 transition-colors'}`} />
                 )}
               </div>
             </div>
 
             {/* Status Text & Progress */}
-            <div className="w-full max-w-xs mb-2">
+            <div className="w-full max-w-xs mb-4">
               {scanState === 'idle' && (
                 <button
                   onClick={startScan}
-                  className="w-full py-2.5 px-4 rounded-xl bg-emerald-500 text-white font-bold hover:bg-emerald-600 active:scale-95 transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-2.5 px-4 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 active:scale-98 transition-all shadow-sm flex items-center justify-center gap-2"
                   id="biometric-start-scan"
                 >
-                  {biometricType === 'fingerprint' ? <Fingerprint className="w-4 h-4 stroke-[2px]" /> : <Scan className="w-4 h-4 stroke-[2px]" />}
-                  {t.biometricIdle}
+                  {biometricType === 'fingerprint' ? <Fingerprint className="w-4 h-4" /> : <Scan className="w-4 h-4" />}
+                  {mode === 'register' ? 'Tap to Initialize Sensor' : 'Tap to Unlock Vault'}
                 </button>
               )}
 
               {scanState === 'scanning' && (
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-semibold text-slate-400">
-                    <span className="animate-pulse">{t.biometricScanning}</span>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs font-semibold text-slate-500">
+                    <span className="animate-pulse">Accessing Secure Hardware...</span>
                     <span>{progress}%</span>
                   </div>
-                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200/50">
+                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-emerald-500 rounded-full transition-all duration-100" 
                       style={{ width: `${progress}%` }}
@@ -203,20 +197,20 @@ export default function BiometricAuthModal({
               )}
 
               {scanState === 'success' && (
-                <p className="text-emerald-600 font-bold text-sm">
-                  {t.biometricSuccess}
+                <p className="text-emerald-600 font-semibold text-sm animate-bounce">
+                  Verification Succeeded! Access Granted.
                 </p>
               )}
 
               {scanState === 'failed' && (
-                <p className="text-rose-600 font-bold text-sm">
-                  {t.biometricFailed}
+                <p className="text-rose-600 font-semibold text-sm">
+                  Authentication Failed. Try again.
                 </p>
               )}
             </div>
 
-            <p className="text-[10px] font-semibold text-slate-400 max-w-xs mt-2">
-              {t.biometricNote}
+            <p className="text-xs text-slate-400 max-w-xs mt-2">
+              Note: This security system utilizes standard web platform credentials paired with high-entropy cryptographic seeds, completely executed in your local sandbox.
             </p>
           </div>
         </motion.div>

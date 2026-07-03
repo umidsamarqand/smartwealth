@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import { UserProfile, SECURITY_QUESTIONS } from '../lib/financeTypes';
-import { User, ShieldCheck, Key, Fingerprint, Scan, CheckCircle2, AlertCircle } from 'lucide-react';
-import { TRANSLATIONS, Language } from '../lib/translations';
+import { User, ShieldCheck, Key, Fingerprint, Scan, RefreshCw, FileText, CheckCircle2, AlertCircle } from 'lucide-react';
 
 interface SecurityProfileProps {
   profile: UserProfile;
@@ -12,7 +11,6 @@ interface SecurityProfileProps {
   onTriggerRegisterBiometrics: () => void;
   onClearBiometrics: () => void;
   onClearLogs: () => void;
-  language: Language;
 }
 
 export default function SecurityProfile({
@@ -21,13 +19,10 @@ export default function SecurityProfile({
   onUpdateProfile,
   onTriggerRegisterBiometrics,
   onClearBiometrics,
-  onClearLogs,
-  language
+  onClearLogs
 }: SecurityProfileProps) {
-  const t = TRANSLATIONS[language] || TRANSLATIONS.en;
-
   const [name, setName] = useState(profile.name);
-  const [email] = useState(profile.email);
+  const [email] = useState(profile.email); // Read-only for auth integrity
   const [securityQuestion, setSecurityQuestion] = useState(profile.securityQuestion || SECURITY_QUESTIONS[0]);
   const [securityAnswer, setSecurityAnswer] = useState(profile.securityAnswer || '');
   const [biometricType, setBiometricType] = useState<'fingerprint' | 'face'>(profile.biometricType === 'face' ? 'face' : 'fingerprint');
@@ -41,12 +36,12 @@ export default function SecurityProfile({
     setFormErrorMsg('');
 
     if (!name.trim()) {
-      setFormErrorMsg(t.formError);
+      setFormErrorMsg('Profile name cannot be blank.');
       return;
     }
 
     if (!securityAnswer.trim()) {
-      setFormErrorMsg(t.formError);
+      setFormErrorMsg('Please provide an answer to your chosen security question for emergency password recovery.');
       return;
     }
 
@@ -57,172 +52,170 @@ export default function SecurityProfile({
       biometricType
     });
 
-    setFormSuccessMsg(t.profileSuccess);
+    setFormSuccessMsg('Personal profile and security configurations successfully committed!');
     setTimeout(() => setFormSuccessMsg(''), 4000);
-  };
-
-  const getQuestionLabel = (q: string) => {
-    const mapped = (t.questions as Record<string, string>)[q];
-    return mapped || q;
   };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6" id="security-profile-module">
       {/* Profile and Security Question settings */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs" id="profile-management-panel">
+      <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs" id="profile-management-panel">
         <div className="flex items-center gap-2 mb-4">
-          <span className="p-2 bg-sky-50 border border-sky-100 rounded-xl text-sky-700">
-            <User className="w-4 h-4 stroke-[2px]" />
+          <span className="p-2 bg-slate-50 border border-slate-100 rounded-xl text-slate-700">
+            <User className="w-4 h-4" />
           </span>
           <div>
-            <h3 className="text-base font-bold text-slate-900">{t.identityProfile}</h3>
-            <p className="text-xs font-semibold text-slate-400">{t.manageIdentity}</p>
+            <h3 className="text-sm font-semibold text-slate-950">Identity Profiles</h3>
+            <p className="text-xs text-slate-500">Manage identity details and recovery credentials</p>
           </div>
         </div>
 
         <form onSubmit={handleProfileSubmit} className="space-y-4" id="update-profile-form">
           {/* Name */}
           <div className="space-y-1">
-            <label htmlFor="profile-name" className="text-xs font-semibold text-slate-600 block">{t.fullName}</label>
+            <label htmlFor="profile-name" className="text-xs font-semibold text-slate-600">Full Name</label>
             <input
               id="profile-name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 text-sm font-semibold bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500/10 focus:border-sky-500 text-slate-900"
+              className="w-full px-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-400 focus:bg-white text-slate-900"
             />
           </div>
 
           {/* Email (Readonly) */}
           <div className="space-y-1">
-            <label htmlFor="profile-email" className="text-xs font-semibold text-slate-600 block">{t.emailPrimary}</label>
+            <label htmlFor="profile-email" className="text-xs font-semibold text-slate-600">Email Address (Primary Login)</label>
             <input
               id="profile-email"
               type="email"
               value={email}
               disabled
-              className="w-full px-3 py-2 text-sm font-semibold bg-slate-100/50 border border-slate-200 rounded-xl text-slate-400 select-none cursor-not-allowed"
+              className="w-full px-4 py-2 text-sm bg-slate-100 border border-slate-200 rounded-xl text-slate-400 font-medium select-none cursor-not-allowed"
             />
-            <span className="text-[10px] text-slate-400 block font-semibold">{t.lockedEmailNote}</span>
+            <span className="text-[10px] text-slate-400 block font-medium">To protect encryption safety, login emails are locked.</span>
           </div>
 
           {/* Security Question Selection */}
           <div className="space-y-1">
-            <label htmlFor="profile-question" className="text-xs font-semibold text-slate-600 block">{t.recoveryQuestion}</label>
+            <label htmlFor="profile-question" className="text-xs font-semibold text-slate-600">Recovery Security Question</label>
             <select
               id="profile-question"
               value={securityQuestion}
               onChange={(e) => setSecurityQuestion(e.target.value)}
-              className="w-full px-3 py-2 text-sm font-semibold bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500/10 focus:border-sky-500 text-slate-900 cursor-pointer"
+              className="w-full px-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-400 focus:bg-white text-slate-900 cursor-pointer"
             >
               {SECURITY_QUESTIONS.map(q => (
-                <option key={q} value={q}>{getQuestionLabel(q)}</option>
+                <option key={q} value={q}>{q}</option>
               ))}
             </select>
           </div>
 
           {/* Security Question Answer */}
           <div className="space-y-1">
-            <label htmlFor="profile-answer" className="text-xs font-semibold text-slate-600 block">{t.questionAnswer}</label>
+            <label htmlFor="profile-answer" className="text-xs font-semibold text-slate-600">Question Answer</label>
             <input
               id="profile-answer"
               type="password"
               placeholder="••••••••"
               value={securityAnswer}
               onChange={(e) => setSecurityAnswer(e.target.value)}
-              className="w-full px-3 py-2 text-sm font-semibold bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500/10 focus:border-sky-500 text-slate-900"
+              className="w-full px-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-400 focus:bg-white text-slate-900"
             />
-            <span className="text-[10px] text-slate-400 block font-semibold">{t.caseInsensitive}</span>
+            <span className="text-[10px] text-slate-400 block font-medium">Case-insensitive. Required for emergency password recovery.</span>
           </div>
 
           {formErrorMsg && (
-            <p className="text-xs font-semibold text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200 flex items-center gap-1">
-              <AlertCircle className="w-4 h-4 shrink-0" /> {formErrorMsg}
+            <p className="text-xs font-medium text-rose-600 bg-rose-50 p-2.5 rounded-lg border border-rose-100 flex items-center gap-1">
+              <AlertCircle className="w-3.5 h-3.5" /> {formErrorMsg}
             </p>
           )}
 
           {formSuccessMsg && (
-            <p className="text-xs font-semibold text-emerald-700 bg-emerald-50 p-3 rounded-xl border border-emerald-200 flex items-center gap-1">
-              <CheckCircle2 className="w-4 h-4 shrink-0" /> {formSuccessMsg}
+            <p className="text-xs font-medium text-emerald-700 bg-emerald-50 p-2.5 rounded-lg border border-emerald-100 flex items-center gap-1">
+              <CheckCircle2 className="w-3.5 h-3.5" /> {formSuccessMsg}
             </p>
           )}
 
           <button
             type="submit"
-            className="w-full py-2.5 px-4 rounded-xl bg-sky-500 hover:bg-sky-600 text-white transition-all text-sm font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-95"
+            className="w-full py-2.5 px-4 rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-all text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-98"
             id="save-profile-btn"
           >
-            <ShieldCheck className="w-4 h-4 stroke-[2px]" /> {t.saveBudget.replace('Goal', 'Profile')}
+            <ShieldCheck className="w-4 h-4" /> Save Profile Details
           </button>
         </form>
       </div>
 
       {/* Biometrics Setup */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col justify-between" id="biometrics-config-panel">
+      <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs flex flex-col justify-between" id="biometrics-config-panel">
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <span className="p-2 bg-emerald-50 border border-emerald-100 rounded-xl text-emerald-700">
-              <Fingerprint className="w-4 h-4 stroke-[2px]" />
+            <span className="p-2 bg-slate-50 border border-slate-100 rounded-xl text-slate-700">
+              <Fingerprint className="w-4 h-4" />
             </span>
             <div>
-              <h3 className="text-base font-bold text-slate-900">{t.localBiometrics}</h3>
-              <p className="text-xs font-semibold text-slate-400">{t.configureBiometric}</p>
+              <h3 className="text-sm font-semibold text-slate-950">Local Biometrics</h3>
+              <p className="text-xs text-slate-500">Configure fingerprint or face security locks</p>
             </div>
           </div>
 
           <div className="space-y-4">
             {/* Choose biometric type */}
             <div className="space-y-1.5">
-              <span className="text-xs font-semibold text-slate-600 block">{t.biometricType}</span>
-              <div className="grid grid-cols-2 gap-1.5 bg-slate-100/80 p-1 rounded-xl border border-slate-200/50">
+              <span className="text-xs font-semibold text-slate-600 block">Biometric Hardware Type</span>
+              <div className="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl">
                 <button
                   type="button"
                   onClick={() => setBiometricType('fingerprint')}
-                  className={`py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  className={`py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                     biometricType === 'fingerprint'
-                      ? 'bg-emerald-500 text-white shadow-xs'
+                      ? 'bg-white text-slate-800 shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                   id="biometric-type-fingerprint"
                 >
-                  <Fingerprint className="w-3.5 h-3.5" /> {t.touchId.split(' ')[0]}
+                  <Fingerprint className="w-3.5 h-3.5" /> Touch ID
                 </button>
                 <button
                   type="button"
                   onClick={() => setBiometricType('face')}
-                  className={`py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  className={`py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                     biometricType === 'face'
-                      ? 'bg-emerald-500 text-white shadow-xs'
+                      ? 'bg-white text-slate-800 shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                   id="biometric-type-face"
                 >
-                  <Scan className="w-3.5 h-3.5" /> {t.faceId.split(' ')[0]}
+                  <Scan className="w-3.5 h-3.5" /> Face ID
                 </button>
               </div>
             </div>
 
             {/* Current status */}
-            <div className="p-3.5 rounded-xl bg-emerald-50/20 border border-emerald-100/80">
-              <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block mb-1">{t.vaultBiometricStatus}</span>
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Vault Biometric Status</span>
               {profile.biometricsEnabled ? (
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <div className="flex items-center gap-1.5 text-emerald-600 font-bold text-xs">
                     <CheckCircle2 className="w-4 h-4 shrink-0" />
-                    <span>{t.biometricsActive}</span>
+                    <span>Active & Secured</span>
                   </div>
-                  <p className="text-[10px] text-emerald-700 font-medium leading-relaxed">
-                    {t.biometricsActiveSub}
+                  <p className="text-[10px] text-slate-500 font-medium">
+                    Simulated {profile.biometricType === 'face' ? 'Face ID' : 'Fingerprint'} authentication is enabled. You can bypass password entry upon launching.
+                  </p>
+                  <p className="text-[9px] text-slate-400 font-mono">
+                    Registered: {profile.biometricRegisteredAt ? new Date(profile.biometricRegisteredAt).toLocaleString() : 'N/A'}
                   </p>
                 </div>
               ) : (
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <div className="flex items-center gap-1.5 text-slate-500 font-bold text-xs">
                     <AlertCircle className="w-4 h-4 shrink-0" />
-                    <span>{t.biometricsNotActive}</span>
+                    <span>Not Configured</span>
                   </div>
-                  <p className="text-[10px] text-slate-500 font-medium leading-relaxed">
-                    {t.biometricsNotActiveSub}
+                  <p className="text-[10px] text-slate-500 font-medium">
+                    Password entry is required. Enable biometrics below to configure immediate local unlocks.
                   </p>
                 </div>
               )}
@@ -234,65 +227,65 @@ export default function SecurityProfile({
         <div className="space-y-2 mt-6">
           <button
             onClick={onTriggerRegisterBiometrics}
-            className="w-full py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white transition-all text-sm font-bold flex items-center justify-center gap-2 shadow-sm active:scale-95 cursor-pointer"
+            className="w-full py-2.5 px-4 rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-all text-sm font-semibold flex items-center justify-center gap-2 shadow-xs active:scale-98 cursor-pointer"
             id="register-biometrics-trigger"
           >
-            {biometricType === 'face' ? <Scan className="w-4 h-4 stroke-[2px]" /> : <Fingerprint className="w-4 h-4 stroke-[2px]" />}
-            {profile.biometricsEnabled ? t.reRegisterBiometrics : t.registerBiometrics}
+            {biometricType === 'face' ? <Scan className="w-4 h-4" /> : <Fingerprint className="w-4 h-4" />}
+            {profile.biometricsEnabled ? 'Re-register Biometric Credentials' : 'Enroll Biometric Profile'}
           </button>
           
           {profile.biometricsEnabled && (
             <button
               onClick={onClearBiometrics}
-              className="w-full py-2 px-4 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 hover:border-rose-100 transition-all text-xs font-semibold cursor-pointer"
+              className="w-full py-2 px-4 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 hover:border-rose-100 transition-all text-xs font-semibold cursor-pointer"
               id="clear-biometrics-btn"
             >
-              {t.disableBiometrics}
+              Disable Biometric Authentication
             </button>
           )}
         </div>
       </div>
 
       {/* Local Cryptography Auditing Logs */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col justify-between" id="cryptography-logs-panel">
+      <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs flex flex-col justify-between" id="cryptography-logs-panel">
         <div>
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-2">
-              <span className="p-2 bg-slate-50 border border-slate-200/80 rounded-xl text-slate-700">
-                <Key className="w-4 h-4 stroke-[2px]" />
+              <span className="p-2 bg-slate-50 border border-slate-100 rounded-xl text-slate-700">
+                <Key className="w-4 h-4" />
               </span>
               <div>
-                <h3 className="text-base font-bold text-slate-900">{t.localSecurityLedger.split(' ')[0]} Ledger</h3>
-                <p className="text-xs font-semibold text-slate-400">{t.liveOperations}</p>
+                <h3 className="text-sm font-semibold text-slate-950">Local Security Ledger</h3>
+                <p className="text-xs text-slate-500">Live cryptographic operation audits</p>
               </div>
             </div>
             
             {securityLogs.length > 0 && (
               <button
                 onClick={onClearLogs}
-                className="text-xs font-semibold text-slate-500 hover:text-slate-700 cursor-pointer bg-slate-100/80 px-2.5 py-1 rounded-full border border-slate-200/60"
+                className="text-[10px] font-bold text-slate-400 hover:text-slate-600 uppercase tracking-wider cursor-pointer"
                 id="clear-logs-btn"
               >
-                {t.clearLogs.split(' ')[0]}
+                Clear
               </button>
             )}
           </div>
 
           {/* Audit logs timeline */}
-          <div className="bg-slate-950 text-slate-400 font-mono text-[10px] rounded-xl p-4 h-[300px] overflow-y-auto border border-slate-800 space-y-2 select-all scrollbar-none" id="terminal-logs-window">
-            <div className="text-slate-500 border-b border-slate-800 pb-1 flex justify-between items-center font-bold">
+          <div className="bg-slate-950 text-slate-400 font-mono text-[10px] rounded-xl p-4 h-[310px] overflow-y-auto border border-slate-800 space-y-2.5 scrollbar-thin select-all" id="terminal-logs-window">
+            <div className="text-slate-500 border-b border-slate-800 pb-1 flex justify-between items-center">
               <span>SECURITY_VAULT_AUDIT.LOG</span>
-              <span className="text-emerald-500 animate-pulse font-semibold">● SECURED_LOCAL_CONTEXT</span>
+              <span className="text-emerald-500 animate-pulse">● SECURED_LOCAL_CONTEXT</span>
             </div>
             {securityLogs.length === 0 ? (
-              <div className="h-44 flex items-center justify-center text-slate-600 text-xs font-bold">
-                {t.waitingLogs}
+              <div className="h-44 flex items-center justify-center text-slate-600 text-xs">
+                Waiting for encryption operations...
               </div>
             ) : (
               securityLogs.map((log, idx) => (
                 <div key={idx} className="leading-normal flex items-start gap-1">
                   <span className="text-emerald-500 font-bold shrink-0">&gt;</span>
-                  <span className="text-slate-200 font-semibold">{log}</span>
+                  <span className="text-slate-200">{log}</span>
                 </div>
               ))
             )}
@@ -300,7 +293,7 @@ export default function SecurityProfile({
         </div>
 
         <p className="text-[10px] text-slate-400 mt-4 leading-relaxed font-semibold">
-          {t.securityDesc}
+          Data encryption leverages a PBKDF2 high-entropy key derivation matrix executing 10,000 iterations to power AES-256-GCM authenticated database envelopes. Perfect privacy is maintained locally in the iframe container.
         </p>
       </div>
     </div>
